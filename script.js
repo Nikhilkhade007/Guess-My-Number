@@ -9,7 +9,7 @@ const x = function () {
   if (!guess) {
     document.querySelector('.message').textContent = '⛔ No Number!';
   }
-  if (score > 1) {
+  if (score > 0) {
     if (guess === number) {
       document.querySelector('.message').textContent = '🎉 Correct Number!';
       if (score > highscore) highscore = score;
