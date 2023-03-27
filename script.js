@@ -8,7 +8,8 @@ const x = function () {
 
   if (!guess) {
     document.querySelector('.message').textContent = '🛑 Put some number!';
-  } else if (score > 0) {
+  } 
+  else if (score > 0) {
     if (guess === secretnumber) {
       document.querySelector('.message').textContent = '🎉 Correct Number!';
       if (score > highscore) highscore = score;
