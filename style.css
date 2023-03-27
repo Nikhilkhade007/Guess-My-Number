@@ -38,7 +38,6 @@ header .between {
   transition: background-color 0.3s ease;
 }
 
-/* Style the .again button inside the header section */
 header .again {
   background-color: #f44336;
 }
