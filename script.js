@@ -1,44 +1,94 @@
-'use strict';
+// Generate a random number between 1 and 20
+let secretNumber = Math.floor(Math.random() * 20) + 1;
 
-let secretnumber = Math.trunc(Math.random() * 20) + 1;
+// Set the initial score and highscore
 let score = 20;
 let highscore = 0;
-const x = function () {
-  const guess = Number(document.querySelector('.guess').value);
 
-  if (!guess) {
-    document.querySelector('.message').textContent = '🛑 Put some number!';
-  } 
-  else if (score > 0) {
-    if (guess === secretnumber) {
-      document.querySelector('.message').textContent = '🎉 Correct Number!';
-      if (score > highscore) highscore = score;
-      document.querySelector('.number').textContent = secretnumber;
-      document.querySelector('.highscore').textContent = highscore;
-      document.body.style.backgroundColor = '#60b347';
-      document.querySelector('.number').style.width = '30rem';
-    } else if (guess > secretnumber) {
-      document.querySelector('.message').textContent = '📈 Too high';
-      score--;
-      document.querySelector('.score').textContent = score;
+// Select elements from the HTML document
+const numberEl = document.querySelector('.number');
+const guessInputEl = document.querySelector('.guess');
+const messageEl = document.querySelector('.message');
+const scoreEl = document.querySelector('.score');
+const highscoreEl = document.querySelector('.highscore');
+
+// Function to display a message
+function displayMessage(message) {
+  messageEl.textContent = message;
+}
+
+// Function to reset the game
+function resetGame() {
+  // Generate a new secret number
+  secretNumber = Math.floor(Math.random() * 20) + 1;
+
+  // Reset the score and update the score display
+  score = 20;
+  scoreEl.textContent = score;
+
+  // Clear the guess input field and focus on it
+  guessInputEl.value = '';
+  guessInputEl.focus();
+
+  // Reset the number display and the message display
+  numberEl.textContent = '?';
+  displayMessage('Start guessing...');
+  // Enable the guessInput
+  guessInputEl.disabled = false;
+}
+
+// Function to handle a correct guess
+function handleCorrectGuess() {
+  // Update the number display and the message display
+  numberEl.textContent = secretNumber;
+  displayMessage('🎉 Correct!');
+
+  // Update the highscore if necessary and update the highscore display
+  if (score > highscore) {
+    highscore = score;
+    highscoreEl.textContent = highscore;
+  }
+}
+
+// Function to handle an incorrect guess
+function handleIncorrectGuess(guess) {
+  // Update the score and the score display
+  if (score > 0) score--;
+  scoreEl.textContent = score;
+
+  // Display a message based on the guess
+  if (guess > secretNumber) {
+    displayMessage('📈 Too high!');
+  } else {
+    displayMessage('📉 Too low!');
+  }
+
+  // End the game if the score reaches 0
+  if (score === 0) {
+    displayMessage('💥 You lost the game!');
+    guessInputEl.disabled = true;
+  }
+}
+
+// Event listener for the "Check!" button
+document.querySelector('.check').addEventListener('click', function () {
+  const guess = Number(guessInputEl.value);
+
+  // Check if the guess is valid
+  if (guess >= 1 && guess <= 20) {
+    // Check if the guess is correct
+    if (guess === secretNumber) {
+      handleCorrectGuess();
     } else {
-      document.querySelector('.message').textContent = '📉 Too low';
-      score--;
-      document.querySelector('.score').textContent = score;
+      handleIncorrectGuess(guess);
     }
   } else {
-    document.querySelector('.message').textContent = '💥 You lose the game!';
-    document.querySelector('.score').textContent = '0';
+    displayMessage('⛔ Invalid guess! (must be between 1 and 20)');
   }
-};
-document.querySelector('.check').addEventListener('click', x);
-let again = function () {
-  secretnumber = Math.trunc(Math.random() * 20) + 1;
-  document.querySelector('.number').textContent = '?';
-  score = 20;
-  document.querySelector('.score').textContent = 20;
-  document.querySelector('.message').textContent = 'Start guessing...';
-  document.body.style.backgroundColor = '#222';
-  document.querySelector('.number').style.width = '15rem';
-};
-document.querySelector('.again').addEventListener('click', again);
+});
+
+// Event listener for the "Again!" button
+document.querySelector('.again').addEventListener('click', function () {
+  resetGame();
+});
+
